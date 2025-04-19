@@ -5,4 +5,7 @@
             <certificates src="system" />
         </trust-anchors>
     </base-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">leowu0511.ddns.net</domain>
+    </domain-config>
 </network-security-config> 

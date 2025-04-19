@@ -57,7 +57,8 @@ fun MainScreen(
     httpViewModel: HttpViewModel = viewModel(),
     networkViewModel: NetworkViewModel = viewModel()
 ) {
-    var selectedTab by remember { mutableStateOf(0) }
+    var selectedTabIndex by remember { mutableStateOf(0) }
+    val tabs = listOf("HTTP 狀態", "Socket 測試", "JSON 發送")
     val httpState by httpViewModel.httpState.collectAsState()
     val networkState by networkViewModel.networkState.collectAsState()
     val scrollState = rememberScrollState()
@@ -77,51 +78,25 @@ fun MainScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(8.dp)
-            .verticalScroll(scrollState),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+            .padding(16.dp)
     ) {
+        // 添加頂部間距
+        Spacer(modifier = Modifier.height(16.dp))
+        
         TabRow(
-            selectedTabIndex = selectedTab,
-            modifier = Modifier.height(80.dp)
+            selectedTabIndex = selectedTabIndex,
+            modifier = Modifier.fillMaxWidth()
         ) {
-            Tab(
-                selected = selectedTab == 0,
-                onClick = { selectedTab = 0 },
-                text = { 
-                    Text(
-                        "HTTP 狀態",
-                        style = MaterialTheme.typography.titleLarge
-                    ) 
-                },
-                modifier = Modifier.height(80.dp)
-            )
-            Tab(
-                selected = selectedTab == 1,
-                onClick = { selectedTab = 1 },
-                text = { 
-                    Text(
-                        "Socket 連接",
-                        style = MaterialTheme.typography.titleLarge
-                    ) 
-                },
-                modifier = Modifier.height(80.dp)
-            )
-            Tab(
-                selected = selectedTab == 2,
-                onClick = { selectedTab = 2 },
-                text = { 
-                    Text(
-                        "JSON 傳送",
-                        style = MaterialTheme.typography.titleLarge
-                    ) 
-                },
-                modifier = Modifier.height(80.dp)
-            )
+            tabs.forEachIndexed { index, title ->
+                Tab(
+                    selected = selectedTabIndex == index,
+                    onClick = { selectedTabIndex = index },
+                    text = { Text(title) }
+                )
+            }
         }
 
-        when (selectedTab) {
+        when (selectedTabIndex) {
             0 -> HttpStatusTab(
                 httpState, 
                 copyToClipboard, 
